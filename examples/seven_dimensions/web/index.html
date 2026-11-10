@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent 评测工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="评测工作台首页"><span class="brand-mark">A<span>·</span></span><span>Agent 评测工作台<small>电商导购演示 / Evaluation Lab</small></span></a>
+    <div class="header-meta"><span class="local-badge"><i></i>本地运行</span><span id="model-label" class="model-label">正在连接服务…</span></div>
+  </header>
+  <main class="workspace">
+    <aside class="case-sidebar">
+      <div class="sidebar-heading"><span class="eyebrow">TEST CASES</span><h2>选择一个场景 <span id="case-count">—</span></h2><p>同一个购物任务，换一种情况观察。</p></div>
+      <nav id="case-list" aria-label="评测用例"><p class="muted">正在加载用例…</p></nav>
+      <div class="sidebar-note"><span class="note-icon">◈</span><p>LLM 使用真实豆包 API<br>商品、检索、接口与购物车均为 Mock</p></div>
+    </aside>
+    <section class="main-area">
+      <section class="scenario-header">
+        <div class="scenario-copy"><div class="eyebrow">ONE CASE, SEVEN PERSPECTIVES</div><h1 id="case-title">逐个运行，看清 Agent 的表现</h1><p id="case-description">选择左侧场景，运行后查看对话、工具调用与评测结论。</p></div>
+        <div class="scenario-symbol" aria-hidden="true">⌁</div>
+      </section>
+      <details id="case-spec-panel" class="case-spec-panel panel" open>
+        <summary class="spec-heading"><span><span class="eyebrow">BEFORE YOU RUN</span><strong>测试用例与评判标准</strong><small>先看要测什么，再运行看实际表现。</small></span><span class="spec-preset-label">预先定义 · 非本次得分</span></summary>
+        <div class="spec-tabs" role="tablist" aria-label="用例与标准详情">
+          <button id="spec-tab-testcase" class="spec-tab active" type="button" role="tab" aria-selected="true" aria-controls="case-spec-content" data-spec-tab="testcase">测试用例</button>
+          <button id="spec-tab-standards" class="spec-tab" type="button" role="tab" aria-selected="false" aria-controls="case-spec-content" data-spec-tab="standards" tabindex="-1">七维标准</button>
+          <button id="spec-tab-mock" class="spec-tab" type="button" role="tab" aria-selected="false" aria-controls="case-spec-content" data-spec-tab="mock" tabindex="-1">Mock 数据与召回标注</button>
+        </div>
+        <div id="case-spec-content" class="case-spec-content" role="tabpanel" aria-labelledby="spec-tab-testcase" aria-live="polite"><p class="spec-loading">正在加载用例说明…</p></div>
+      </details>
+      <section class="controls" aria-label="运行配置">
+        <div class="control-options"><fieldset class="mode-switch"><legend class="sr-only">运行方式</legend><label><input type="radio" name="mode" value="live" checked><span>真实模型</span></label><label><input type="radio" name="mode" value="offline"><span>离线演示</span></label></fieldset><label class="repeat-control">重复 <select id="repeat-count" aria-label="重复次数"><option value="1">1 次</option><option value="2">2 次</option><option value="3">3 次</option></select></label><label class="judge-control"><input id="judge-enabled" type="checkbox" checked><span>LLM 语义裁判</span></label></div>
+        <button id="run-button" class="run-button" type="button" disabled><span class="play-icon">▶</span><span id="run-label">运行此 Case</span></button>
+        <p id="mode-note" class="mode-note">仅点击运行后才调用模型；每次运行会产生 API 用量。</p>
+      </section>
+      <div id="error-banner" class="error-banner" role="alert" hidden></div>
+      <section class="run-strip" aria-live="polite"><div class="run-status"><span id="status-dot" class="status-dot"></span><strong id="run-status">准备就绪</strong><span id="run-stage">等待开始运行</span></div><div class="run-actions"><label id="repeat-view-wrap" hidden>查看 <select id="repeat-view" aria-label="查看第几次运行"></select></label><span id="elapsed">—</span><a id="report-link" class="report-link" href="#" target="_blank" rel="noopener" hidden>完整报告 ↗</a></div></section>
+      <div class="content-grid">
+        <section class="execution-panel panel">
+          <div class="panel-header"><div class="tabs" role="tablist" aria-label="执行详情"><button id="tab-conversation" role="tab" aria-selected="true" class="tab active" data-tab="conversation">对话过程</button><button id="tab-tools" role="tab" aria-selected="false" class="tab" data-tab="tools">工具调用 <span id="tool-count" class="count">0</span></button><button id="tab-evidence" role="tab" aria-selected="false" class="tab" data-tab="evidence">检索证据</button></div><span id="source-badge" class="source-badge">待运行</span></div>
+          <div id="execution-content" class="execution-content" role="tabpanel" aria-labelledby="tab-conversation"></div>
+          <div id="usage-bar" class="usage-bar"><span>模型调用 <b>—</b></span><span>Token <b>—</b></span><span>费用 <b>未知</b></span></div>
+        </section>
+        <aside class="results-column">
+          <section class="dimensions-panel panel"><div class="section-heading"><div><span class="eyebrow">EVALUATION</span><h2>七个评测维度</h2></div><span id="dimension-summary" class="dimension-summary">等待评测</span></div><div id="dimensions" class="dimensions"></div><div class="status-legend"><span><i class="legend-dot pass"></i>通过</span><span><i class="legend-dot fail"></i>未通过</span><span><i class="legend-dot unknown"></i>未知</span><span><i class="legend-dot na"></i>不适用</span></div><div id="dimension-detail" class="dimension-detail" hidden></div></section>
+          <section class="cart-panel panel"><div class="section-heading"><div><span class="eyebrow">STATE CHANGE</span><h2>购物车变化</h2></div><span class="user-badge">U001</span></div><div id="cart-content" class="cart-content"><p class="muted">运行后对照真实状态，核实是否加购。</p></div></section>
+        </aside>
+      </div>
+      <footer class="page-footer"><span>先看结果，再追溯原因。</span><span>未知表示证据不足；单次通过不代表稳定。</span></footer>
+    </section>
+  </main>
+</body>
+</html>

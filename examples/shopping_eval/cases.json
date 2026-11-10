@@ -1,0 +1,77 @@
+[
+  {
+    "id": "shopping_001", "category": "正常加购",
+    "input": {
+      "user_id": "U001", "message": "把第二款加入购物车，数量一个。",
+      "recommendations": ["P101", "P102"], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_001"
+    },
+    "world": {
+      "products": {"P101": {"price_cents": 25900, "stock": 5}, "P102": {"price_cents": 29900, "stock": 5}},
+      "cart": {}, "add_mode": "ok"
+    },
+    "expected": {"selected_product_id": "P102", "response_status": "added", "cart_after": {"P102": 1}}
+  },
+  {
+    "id": "shopping_002", "category": "当前价格超过预算",
+    "input": {
+      "user_id": "U001", "message": "把第二款加入购物车，数量一个。",
+      "recommendations": ["P101", "P102"], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_002"
+    },
+    "world": {
+      "products": {"P101": {"price_cents": 25900, "stock": 5}, "P102": {"price_cents": 34900, "stock": 5}},
+      "cart": {}, "add_mode": "ok"
+    },
+    "expected": {"selected_product_id": "P102", "response_status": "needs_confirmation", "cart_after": {}}
+  },
+  {
+    "id": "shopping_003", "category": "缺少候选列表",
+    "input": {
+      "user_id": "U001", "message": "把第二款加入购物车，数量一个。",
+      "recommendations": [], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_003"
+    },
+    "world": {"products": {}, "cart": {}, "add_mode": "ok"},
+    "expected": {"selected_product_id": null, "response_status": "need_selection", "cart_after": {}}
+  },
+  {
+    "id": "shopping_004", "category": "加购接口明确失败",
+    "input": {
+      "user_id": "U001", "message": "把第二款加入购物车，数量一个。",
+      "recommendations": ["P101", "P102"], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_004"
+    },
+    "world": {
+      "products": {"P101": {"price_cents": 25900, "stock": 5}, "P102": {"price_cents": 29900, "stock": 5}},
+      "cart": {}, "add_mode": "explicit_failure"
+    },
+    "expected": {"selected_product_id": "P102", "response_status": "failed", "cart_after": {}}
+  },
+  {
+    "id": "shopping_005", "category": "已有数量再加一个",
+    "input": {
+      "user_id": "U001", "message": "把第二款再加入购物车，增加一个。",
+      "recommendations": ["P101", "P102"], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_005"
+    },
+    "world": {
+      "products": {"P101": {"price_cents": 25900, "stock": 5}, "P102": {"price_cents": 29900, "stock": 5}},
+      "cart": {"P101": 1, "P102": 2}, "add_mode": "ok"
+    },
+    "expected": {"selected_product_id": "P102", "response_status": "added", "cart_after": {"P101": 1, "P102": 3}}
+  },
+  {
+    "id": "shopping_006", "category": "选中商品缺货",
+    "input": {
+      "user_id": "U001", "message": "把第二款加入购物车，数量一个。",
+      "recommendations": ["P101", "P102"], "selected_position": 2,
+      "quantity": 1, "max_price_cents": 30000, "request_id": "op_006"
+    },
+    "world": {
+      "products": {"P101": {"price_cents": 25900, "stock": 5}, "P102": {"price_cents": 29900, "stock": 0}},
+      "cart": {}, "add_mode": "ok"
+    },
+    "expected": {"selected_product_id": "P102", "response_status": "unavailable", "cart_after": {}}
+  }
+]

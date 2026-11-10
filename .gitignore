@@ -1,0 +1,25 @@
+# Local credentials and environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.venv/
+venv/
+
+# Python caches and generated runtime reports
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+reports/
+docs/sample-reports/
+tmp/
+*.log
+
+# Local editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

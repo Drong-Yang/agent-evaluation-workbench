@@ -1,0 +1,277 @@
+{
+  "version": "fixed",
+  "case_count": 6,
+  "rules_passed": 6,
+  "rule_pass_rate": 1.0,
+  "note": "Offline deterministic demo. Retrieval and semantic reviews are not scored.",
+  "results": [
+    {
+      "id": "shopping_001",
+      "category": "正常加购",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "added",
+        "product_id": "P102",
+        "quantity": 1,
+        "message": "已将 P102 加入购物车，增加 1 件。"
+      },
+      "trace": [
+        {
+          "tool": "get_product",
+          "args": {
+            "product_id": "P102"
+          },
+          "result": {
+            "ok": true,
+            "price_cents": 29900,
+            "stock": 5
+          }
+        },
+        {
+          "tool": "add_to_cart",
+          "args": {
+            "product_id": "P102",
+            "quantity": 1,
+            "request_id": "op_001"
+          },
+          "result": {
+            "ok": true,
+            "cart_quantity": 1
+          }
+        }
+      ],
+      "cart_user_id": "U001",
+      "cart_before": {},
+      "cart_after": {
+        "P102": 1
+      },
+      "cart_changed": true,
+      "elapsed_ms": 0.024,
+      "tool_calls": 2
+    },
+    {
+      "id": "shopping_002",
+      "category": "当前价格超过预算",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "needs_confirmation",
+        "product_id": "P102",
+        "message": "所选商品当前价格超过预算，请确认是否调整选择。"
+      },
+      "trace": [
+        {
+          "tool": "get_product",
+          "args": {
+            "product_id": "P102"
+          },
+          "result": {
+            "ok": true,
+            "price_cents": 34900,
+            "stock": 5
+          }
+        }
+      ],
+      "cart_user_id": "U001",
+      "cart_before": {},
+      "cart_after": {},
+      "cart_changed": false,
+      "elapsed_ms": 0.011,
+      "tool_calls": 1
+    },
+    {
+      "id": "shopping_003",
+      "category": "缺少候选列表",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "need_selection",
+        "message": "请提供候选商品或明确要选哪款。"
+      },
+      "trace": [],
+      "cart_user_id": "U001",
+      "cart_before": {},
+      "cart_after": {},
+      "cart_changed": false,
+      "elapsed_ms": 0.004,
+      "tool_calls": 0
+    },
+    {
+      "id": "shopping_004",
+      "category": "加购接口明确失败",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "failed",
+        "product_id": "P102",
+        "message": "服务明确返回失败，本次未加入购物车。"
+      },
+      "trace": [
+        {
+          "tool": "get_product",
+          "args": {
+            "product_id": "P102"
+          },
+          "result": {
+            "ok": true,
+            "price_cents": 29900,
+            "stock": 5
+          }
+        },
+        {
+          "tool": "add_to_cart",
+          "args": {
+            "product_id": "P102",
+            "quantity": 1,
+            "request_id": "op_004"
+          },
+          "result": {
+            "ok": false,
+            "error": "service_unavailable",
+            "added": false
+          }
+        }
+      ],
+      "cart_user_id": "U001",
+      "cart_before": {},
+      "cart_after": {},
+      "cart_changed": false,
+      "elapsed_ms": 0.015,
+      "tool_calls": 2
+    },
+    {
+      "id": "shopping_005",
+      "category": "已有数量再加一个",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "added",
+        "product_id": "P102",
+        "quantity": 1,
+        "message": "已将 P102 加入购物车，增加 1 件。"
+      },
+      "trace": [
+        {
+          "tool": "get_product",
+          "args": {
+            "product_id": "P102"
+          },
+          "result": {
+            "ok": true,
+            "price_cents": 29900,
+            "stock": 5
+          }
+        },
+        {
+          "tool": "add_to_cart",
+          "args": {
+            "product_id": "P102",
+            "quantity": 1,
+            "request_id": "op_005"
+          },
+          "result": {
+            "ok": true,
+            "cart_quantity": 3
+          }
+        }
+      ],
+      "cart_user_id": "U001",
+      "cart_before": {
+        "P101": 1,
+        "P102": 2
+      },
+      "cart_after": {
+        "P101": 1,
+        "P102": 3
+      },
+      "cart_changed": true,
+      "elapsed_ms": 0.016,
+      "tool_calls": 2
+    },
+    {
+      "id": "shopping_006",
+      "category": "选中商品缺货",
+      "rules_passed": true,
+      "checks": {
+        "response_status": true,
+        "selected_product": true,
+        "cart_state": true,
+        "unrelated_items_preserved": true,
+        "write_preconditions": true,
+        "trace_matches_cart": true,
+        "reported_addition_confirmed": true
+      },
+      "semantic_review": "pending",
+      "response": {
+        "status": "unavailable",
+        "product_id": "P102",
+        "message": "所选商品当前不可用或库存不足，请重新选择。"
+      },
+      "trace": [
+        {
+          "tool": "get_product",
+          "args": {
+            "product_id": "P102"
+          },
+          "result": {
+            "ok": true,
+            "price_cents": 29900,
+            "stock": 0
+          }
+        }
+      ],
+      "cart_user_id": "U001",
+      "cart_before": {},
+      "cart_after": {},
+      "cart_changed": false,
+      "elapsed_ms": 0.008,
+      "tool_calls": 1
+    }
+  ]
+}
